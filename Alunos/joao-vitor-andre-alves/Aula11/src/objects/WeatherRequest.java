@@ -43,8 +43,8 @@ public class WeatherRequest {
                 null,
                 "metric",
                 "pt",
-                List.of("current"),
-                List.of("datetime", "temp", "humidity", "conditions", "windspeed"),
+                List.of("current", "days"),
+                List.of("datetime", "temp", "tempmax", "tempmin", "humidity", "conditions", "windspeed", "winddir", "precip"),
                 "json");
     }
 

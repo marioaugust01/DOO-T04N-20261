@@ -1,11 +1,11 @@
 package objects;
 
-import java.io.IOException;;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
 
@@ -20,34 +20,33 @@ public class WeatherService {
         this.httpClient = HttpClient.newHttpClient();
     }
 
-    // METODO QUE FAZ O REQUEST E ENVIA OS DADOS RETORNADOS PRA RESPONSE
     public WeatherResponse consultar(WeatherRequest request) {
         String url = montarUrl(request);
-        HttpResquest httpRequest = HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .GET()
-            .build();
-            
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
         try {
-            HttpResponde<String> httpResponse = httpClient.send(
-                httpRequest,
-                HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> httpResponse = httpClient.send(
+                    httpRequest,
+                    HttpResponse.BodyHandlers.ofString());
 
             return new WeatherResponse(
-                httpResponse.statusCode(),
-                httpResponse.body(),
-                url);
+                    httpResponse.statusCode(),
+                    httpResponse.body(),
+                    url);
         } catch (IOException e) {
             return new WeatherResponse(
-                0,
-                "Erro ao consultar a API: " + e.GetMessage(),url);
-            )
+                    0,
+                    "Erro ao consultar a API: " + e.getMessage(),
+                    url);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             return new WeatherResponse(
-                0,
-                "Consulta interrompida.",url);
-            )
+                    0,
+                    "Consulta interrompida.",
+                    url);
         }
     }
 
@@ -56,12 +55,12 @@ public class WeatherService {
 
         url.append(encode(request.getLocation()));
 
-        if (request.getDate1() != null && !request.getDate1().isBlank()) {
-            url.append("/").append(encode(request.getDate1()));
+        if (request.getInit() != null && !request.getInit().isBlank()) {
+            url.append("/").append(encode(request.getInit()));
         }
 
-        if (request.getDate2() != null && !request.getDate2().isBlank()) {
-            url.append("/").append(encode(request.getDate2()));
+        if (request.getFim() != null && !request.getFim().isBlank()) {
+            url.append("/").append(encode(request.getFim()));
         }
 
         url.append("?key=").append(encode(apiKey));
@@ -74,9 +73,10 @@ public class WeatherService {
             url.append("&lang=").append(encode(request.getLang()));
         }
 
-        if (request.getInclude() != null && request.getInclude().isEmpty()) {
+        if (request.getInclude() != null && !request.getInclude().isEmpty()) {
             url.append("&include=").append(join(request.getInclude()));
         }
+
         if (request.getElements() != null && !request.getElements().isEmpty()) {
             url.append("&elements=").append(join(request.getElements()));
         }
@@ -99,5 +99,4 @@ public class WeatherService {
     private String encode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8);
     }
-
 }

@@ -69,9 +69,28 @@ public class WeatherResponse {
                 extrairNumero(objeto, "temp"),
                 extrairNumero(objeto, "humidity"),
                 extrairTexto(objeto, "conditions"),
-                extrairNumero(objeto, "windspeed")
+                extrairNumero(objeto, "windspeed"),
+                extrairNumero(objeto, "winddir"),
+                extrairNumero(objeto, "precip")
         );
-    }   
+    }
+
+    private static List<WeatherDay> montarDias(String json) {
+        String array = extrairArray(json, "days");
+        if (array == null) {
+            return new ArrayList<>();
+        }
+
+        List<WeatherDay> dias = new ArrayList<>();
+        for (String obj : separarObjetos(array)) {
+            dias.add(new WeatherDay(
+                    extrairTexto(obj, "datetime"),
+                    extrairNumero(obj, "tempmax"),
+                    extrairNumero(obj, "tempmin")
+            ));
+        }
+        return dias;
+    }
 
     private static String extrairTexto(String json, String campo) {
         Matcher matcher = Pattern
