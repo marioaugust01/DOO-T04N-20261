@@ -33,11 +33,11 @@ public class TelaPrincipal extends JFrame {
         String nome = campoBusca.getText();
         areaResultado.setText("");
 
-        try { 
+        try {
             TVMazeService servico = new TVMazeService();
             List<Serie> series = servico.buscarSeries(nome);
 
-            if(series.isEmpty()) {
+            if (series.isEmpty()) {
                 areaResultado.setText("Nenhuma serie foi encontrada!");
                 return;
             }
@@ -51,10 +51,9 @@ public class TelaPrincipal extends JFrame {
                 areaResultado.append("Estreia:  " + s.getDataEstreia() + "\n");
                 areaResultado.append("Termino:  " + s.getDataTermino() + "\n");
                 areaResultado.append("Emissora: " + s.getEmissora() + "\n");
-                areaResultado.append("--------------------------\n");                
+                areaResultado.append("--------------------------\n");
             }
         } catch (Exception ex) {
-            // mostra o erro na tela pro usuario
             JOptionPane.showMessageDialog(this, "Erro ao buscar: " + ex.getMessage());
         }
     }

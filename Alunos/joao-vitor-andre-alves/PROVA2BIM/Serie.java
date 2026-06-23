@@ -104,4 +104,23 @@ public class Serie {
     public String toString() {
         return nome;
     }
+
+    // compara com outra serie se ela ja existe
+    // ex: a.equals(b)
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Serie)) {
+            return false;
+        }
+        Serie outra = (Serie) obj;
+        return id == outra.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }
